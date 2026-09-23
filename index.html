@@ -3,57 +3,55 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CYBERCODE // Escola de Tecnologia Retrocyberpunk</title>
+  <title>Tech Grunge Academy | Cursos de Tecnologia</title>
   
-  <!-- Fontes Retrocyberpunk -->
+  <!-- Fontes do Google -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
   
-  <!-- Three.js CDN para o Background 3D -->
+  <!-- Three.js CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
   <style>
     /* ==========================================================================
-       1. VARIÁVEIS DE COR E SETUP GLOBAL
+       VARIÁVEIS DE CORES & CONFIGURAÇÕES BASE
        ========================================================================== */
     :root {
-      /* Palette Hex */
-      --rebecca-purple: #6e2594;
-      --grape-soda: #8e5180;
-      --dusty-taupe: #ad7d6c;
-      --golden-bronze: #cda958;
-      --old-gold: #ddbf4e;
-      --golden-glow: #ecd444;
-      --grey: #808080;
-      --gunmetal: #404040;
-      --black: #000000;
-      --white: #ffffff;
-
-      /* Tipografia */
-      --font-title: 'Orbitron', sans-serif;
-      --font-body: 'Rajdhani', sans-serif;
+      --brick-ember: #c03221;
+      --ghost-white: #f7f7ff;
+      --almond-cream: #f5e4d2;
+      --apricot-cream: #f2d0a4;
+      --blue-slate: #545e75;
+      --pine-blue: #4a7071;
+      --jungle-teal: #3f826d;
+      
+      /* Glassmorfismo */
+      --glass-bg: rgba(84, 94, 117, 0.25);
+      --glass-border: rgba(247, 247, 255, 0.15);
+      --glass-blur: blur(12px);
+      
+      --font-heading: 'Permanent Marker', cursive;
+      --font-body: 'Space Grotesk', sans-serif;
     }
 
     * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
-      scroll-behavior: smooth;
     }
 
     body {
-      background-color: var(--black);
-      color: var(--white);
+      background-color: #121418;
+      color: var(--ghost-white);
       font-family: var(--font-body);
       overflow-x: hidden;
       min-height: 100vh;
+      line-height: 1.5;
     }
 
-    /* ==========================================================================
-       2. EFEITOS RETRO (BACKGROUND 3D E CRT)
-       ========================================================================== */
-    #three-canvas {
+    /* Canvas para Three.js */
+    #webgl-bg {
       position: fixed;
       top: 0;
       left: 0;
@@ -63,615 +61,663 @@
       pointer-events: none;
     }
 
-    /* Overlay de Scanlines Estilo TV CRT Anos 80 */
-    .crt-overlay {
+    /* Overlay com ruído/textura Grunge */
+    .grunge-overlay {
       position: fixed;
       top: 0;
       left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.35) 50%);
-      background-size: 100% 4px;
-      z-index: 10;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, transparent 60%, rgba(0,0,0,0.8) 100%);
       pointer-events: none;
-      opacity: 0.6;
+      z-index: 0;
     }
 
     /* ==========================================================================
-       3. GLASSMORFISMO & COMPONENTES VISUAIS
+       HEADER & NAVEGAÇÃO
        ========================================================================== */
-    .glass-card, .glass-header, .glass-footer {
-      background: rgba(110, 37, 148, 0.2);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(236, 212, 68, 0.35);
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
-      border-radius: 12px;
-    }
-
-    .neon-text {
-      color: var(--golden-glow);
-      text-shadow: 0 0 8px var(--golden-glow), 0 0 15px var(--old-gold);
-    }
-
-    .gold-text {
-      color: var(--old-gold);
-    }
-
-    .blink {
-      animation: blink 1s infinite;
-    }
-
-    @keyframes blink {
-      50% { opacity: 0; }
-    }
-
-    /* ==========================================================================
-       4. HEADER E NAVEGAÇÃO
-       ========================================================================== */
-    .glass-header {
-      position: fixed;
-      top: 15px;
-      left: 5%;
-      right: 5%;
-      width: 90%;
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(18, 20, 24, 0.6);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border-bottom: 1px solid var(--glass-border);
+      padding: 1rem 1.5rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1rem 2rem;
-      z-index: 100;
     }
 
     .logo {
-      font-family: var(--font-title);
-      font-size: 1.4rem;
-      font-weight: 900;
-      letter-spacing: 2px;
+      font-family: var(--font-heading);
+      font-size: 1.6rem;
+      color: var(--brick-ember);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      text-shadow: 2px 2px 0px var(--apricot-cream);
     }
 
-    .nav-links {
+    nav ul {
       display: flex;
-      align-items: center;
+      gap: 1.5rem;
+      list-style: none;
+    }
+
+    nav a {
+      color: var(--ghost-white);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: color 0.3s ease;
+    }
+
+    nav a:hover, nav a.active {
+      color: var(--apricot-cream);
+      text-shadow: 0 0 8px var(--brick-ember);
+    }
+
+    /* ==========================================================================
+       CONTAINER DAS TELAS (SPA)
+       ========================================================================== */
+    main {
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    .page-screen {
+      display: none;
+      animation: fadeIn 0.4s ease-in-out forwards;
+    }
+
+    .page-screen.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ==========================================================================
+       COMPONENTES GLASSMORPHISM & GRUNGE
+       ========================================================================== */
+    .glass-card {
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .glass-card::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg, var(--brick-ember), transparent, var(--jungle-teal));
+      z-index: -1;
+      border-radius: 14px;
+      opacity: 0.3;
+    }
+
+    .btn-grunge {
+      display: inline-block;
+      background: var(--brick-ember);
+      color: var(--ghost-white);
+      padding: 0.8rem 1.5rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: var(--font-body);
+      box-shadow: 4px 4px 0px var(--apricot-cream);
+      transition: all 0.2s ease;
+    }
+
+    .btn-grunge:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px var(--apricot-cream);
+      background: #d63d2a;
+    }
+
+    .btn-grunge:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0px var(--apricot-cream);
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      background: var(--jungle-teal);
+      color: var(--ghost-white);
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 0.8rem;
+    }
+
+    /* ==========================================================================
+       TELA 1: HOME
+       ========================================================================== */
+    .hero {
+      text-align: center;
+      padding: 3rem 1rem;
+      margin-bottom: 3rem;
+    }
+
+    .hero h1 {
+      font-family: var(--font-heading);
+      font-size: clamp(2.2rem, 6vw, 4rem);
+      color: var(--almond-cream);
+      margin-bottom: 1rem;
+      line-height: 1.1;
+      text-shadow: 3px 3px 0px var(--brick-ember);
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      color: var(--apricot-cream);
+      max-width: 650px;
+      margin: 0 auto 2rem;
+    }
+
+    .categories-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 1.5rem;
     }
 
-    .nav-links a {
-      color: var(--white);
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 1.1rem;
-      transition: all 0.3s ease;
-      letter-spacing: 1px;
+    .category-card {
+      transition: transform 0.3s ease;
     }
 
-    .nav-links a:hover {
-      color: var(--golden-glow);
-      text-shadow: 0 0 5px var(--golden-glow);
+    .category-card:hover {
+      transform: translateY(-5px);
     }
 
-    /* ==========================================================================
-       5. BOTÕES COM GLOW
-       ========================================================================== */
-    .btn-primary, .btn-glow {
-      background: linear-gradient(135deg, var(--rebecca-purple), var(--grape-soda));
-      color: var(--golden-glow);
-      border: 1px solid var(--golden-glow);
-      padding: 0.75rem 1.5rem;
-      border-radius: 6px;
-      font-family: var(--font-title);
-      font-weight: 700;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-block;
-      transition: all 0.3s ease;
-      box-shadow: 0 0 10px rgba(236, 212, 68, 0.2);
-      text-align: center;
-    }
-
-    .btn-primary:hover, .btn-glow:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 0 20px rgba(236, 212, 68, 0.7);
-      background: var(--golden-glow);
-      color: var(--black);
+    .category-card h3 {
+      font-family: var(--font-heading);
+      font-size: 1.5rem;
+      color: var(--apricot-cream);
+      margin-bottom: 0.5rem;
     }
 
     /* ==========================================================================
-       6. CONTEÚDO PRINCIPAL & SEÇÕES
+       TELA 2: CATÁLOGO DE CURSOS
        ========================================================================== */
-    main {
-      padding: 130px 5% 40px 5%;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    section {
-      margin-bottom: 80px;
-    }
-
-    /* Hero */
-    .hero-card {
-      padding: 3.5rem 2rem;
-      text-align: center;
-    }
-
-    .badge {
-      display: inline-block;
-      padding: 0.3rem 0.8rem;
-      background: rgba(142, 81, 128, 0.4);
-      border: 1px solid var(--golden-bronze);
-      color: var(--golden-glow);
-      font-family: var(--font-title);
-      font-size: 0.8rem;
-      border-radius: 20px;
-      letter-spacing: 1px;
-      margin-bottom: 1rem;
-    }
-
-    .hero-card h1 {
-      font-family: var(--font-title);
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-      line-height: 1.2;
-    }
-
-    .hero-card p {
-      font-size: 1.2rem;
-      color: #ddd;
-      max-width: 700px;
-      margin: 0 auto 2rem auto;
-    }
-
-    .hero-btns {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-
-    /* Cursos & Filtros */
-    .section-title {
-      text-align: center;
+    .courses-header {
       margin-bottom: 2rem;
+      text-align: center;
     }
 
-    .section-title h2 {
-      font-family: var(--font-title);
-      font-size: 2rem;
-      letter-spacing: 2px;
-    }
-
-    .section-title p {
-      color: var(--dusty-taupe);
-      font-size: 1.1rem;
-    }
-
-    .filter-container {
+    .filter-bar {
       display: flex;
       justify-content: center;
       gap: 0.8rem;
-      padding: 1rem;
-      margin-bottom: 2rem;
       flex-wrap: wrap;
+      margin-top: 1rem;
     }
 
     .filter-btn {
-      background: rgba(64, 64, 64, 0.6);
-      border: 1px solid var(--grey);
-      color: var(--white);
-      padding: 0.5rem 1.2rem;
-      border-radius: 4px;
-      font-family: var(--font-title);
+      background: var(--blue-slate);
+      color: var(--ghost-white);
+      border: 1px solid var(--glass-border);
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
       cursor: pointer;
-      transition: all 0.3s;
+      font-family: var(--font-body);
+      transition: all 0.3s ease;
     }
 
-    .filter-btn:hover, .filter-btn.active {
-      background: var(--rebecca-purple);
-      border-color: var(--golden-glow);
-      color: var(--golden-glow);
-      box-shadow: 0 0 10px rgba(236, 212, 68, 0.4);
+    .filter-btn.active, .filter-btn:hover {
+      background: var(--jungle-teal);
+      border-color: var(--apricot-cream);
     }
 
     .courses-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.8rem;
     }
 
     .course-card {
-      padding: 1.8rem;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      transition: all 0.3s ease;
-    }
-
-    .course-card:hover {
-      transform: translateY(-6px);
-      border-color: var(--golden-glow);
-      box-shadow: 0 10px 25px rgba(110, 37, 148, 0.5);
     }
 
     .course-card h3 {
-      font-family: var(--font-title);
-      margin: 0.8rem 0;
-      color: var(--white);
-      font-size: 1.2rem;
+      font-size: 1.3rem;
+      color: var(--almond-cream);
+      margin-bottom: 0.5rem;
     }
 
-    .course-card p {
-      color: #ccc;
-      font-size: 1rem;
-      line-height: 1.4;
-    }
-
-    /* Sobre a Escola */
-    .about-card {
-      padding: 3rem;
-      text-align: center;
-    }
-
-    .about-card h2 {
-      font-family: var(--font-title);
-      font-size: 2rem;
+    .course-card .hours {
+      font-size: 0.9rem;
+      color: var(--apricot-cream);
+      font-weight: 700;
       margin-bottom: 1rem;
-    }
-
-    .about-card p {
-      font-size: 1.2rem;
-      max-width: 800px;
-      margin: 0 auto 2rem auto;
-      line-height: 1.6;
-    }
-
-    .stats-grid {
       display: flex;
-      justify-content: space-around;
-      flex-wrap: wrap;
-      gap: 1.5rem;
-    }
-
-    .stat-item {
-      display: flex;
-      flex-direction: column;
       align-items: center;
+      gap: 0.4rem;
     }
 
-    .stat-number {
-      font-family: var(--font-title);
-      font-size: 2.2rem;
-      color: var(--golden-glow);
-      font-weight: 900;
-    }
-
-    .stat-label {
-      color: var(--dusty-taupe);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    /* Formulário */
-    .form-card {
-      padding: 2.5rem;
+    /* ==========================================================================
+       TELA 3: INSCRIÇÃO / CONTATO
+       ========================================================================== */
+    .contact-container {
       max-width: 600px;
       margin: 0 auto;
     }
 
-    .form-card h2 {
-      font-family: var(--font-title);
-      text-align: center;
-      margin-bottom: 1.5rem;
-    }
-
-    .input-group {
+    .form-group {
       margin-bottom: 1.2rem;
-      display: flex;
-      flex-direction: column;
     }
 
-    .input-group label {
-      font-family: var(--font-title);
-      font-size: 0.85rem;
-      color: var(--golden-glow);
+    .form-group label {
+      display: block;
       margin-bottom: 0.4rem;
-      letter-spacing: 1px;
+      font-weight: 600;
+      color: var(--almond-cream);
     }
 
-    .input-group input, .input-group select {
-      background: rgba(0, 0, 0, 0.6);
-      border: 1px solid var(--grape-soda);
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
       padding: 0.8rem;
+      background: rgba(18, 20, 24, 0.7);
+      border: 1px solid var(--glass-border);
       border-radius: 6px;
-      color: var(--white);
+      color: var(--ghost-white);
       font-family: var(--font-body);
       font-size: 1rem;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
       outline: none;
-      transition: border-color 0.3s;
+      border-color: var(--brick-ember);
+      box-shadow: 0 0 8px rgba(192, 50, 33, 0.5);
     }
 
-    .input-group input:focus, .input-group select:focus {
-      border-color: var(--golden-glow);
-      box-shadow: 0 0 8px rgba(236, 212, 68, 0.4);
-    }
-
-    .full-width {
-      width: 100%;
+    /* Feedback do Formulário */
+    .form-feedback {
+      display: none;
+      padding: 1rem;
+      background: var(--jungle-teal);
+      color: var(--ghost-white);
+      border-radius: 6px;
       margin-top: 1rem;
-    }
-
-    /* Footer */
-    .glass-footer {
       text-align: center;
-      padding: 1.5rem;
-      margin-top: 40px;
-      font-family: var(--font-title);
-      font-size: 0.85rem;
-      color: var(--grey);
+      font-weight: 600;
     }
 
     /* ==========================================================================
-       7. RESPONSIVIDADE (MOBILE FIRST ADAPTATIVO)
+       RODAPÉ
        ========================================================================== */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 2rem 1.5rem;
+      border-top: 1px solid var(--glass-border);
+      background: rgba(18, 20, 24, 0.8);
+      margin-top: 4rem;
+      font-size: 0.85rem;
+      color: var(--pine-blue);
+    }
+
+    /* Responsive Adjustments */
     @media (max-width: 768px) {
-      .glass-header {
+      header {
         flex-direction: column;
         gap: 0.8rem;
-        padding: 0.8rem 1rem;
       }
-
-      .nav-links {
-        gap: 0.8rem;
-      }
-
-      .nav-links a {
-        font-size: 0.9rem;
-      }
-
-      .hero-card h1 {
-        font-size: 1.7rem;
-      }
-
-      .hero-card p {
-        font-size: 1rem;
-      }
-
-      main {
-        padding-top: 170px;
+      
+      nav ul {
+        gap: 1rem;
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- Canvas Three.js (Background 3D) -->
-  <canvas id="three-canvas"></canvas>
+  <!-- Canvas 3D do Three.js -->
+  <canvas id="webgl-bg"></canvas>
+  <div class="grunge-overlay"></div>
 
-  <!-- Overlay de Scanlines CRT -->
-  <div class="crt-overlay"></div>
-
-  <!-- Header -->
-  <header class="glass-header">
-    <div class="logo">
-      <span class="neon-text">CYBER</span><span class="gold-text">CODE</span><span class="blink">_</span>
-    </div>
-    <nav class="nav-links">
-      <a href="#hero">Início</a>
-      <a href="#cursos">Cursos</a>
-      <a href="#sobre">A Escola</a>
-      <a href="#contato" class="btn-glow">Inscreva-se</a>
+  <!-- Header & Menu de Navegação -->
+  <header>
+    <div class="logo">Tech Grunge</div>
+    <nav>
+      <ul>
+        <li><a href="#" onclick="showPage('home')" id="nav-home" class="active">Início</a></li>
+        <li><a href="#" onclick="showPage('cursos')" id="nav-cursos">Cursos</a></li>
+        <li><a href="#" onclick="showPage('inscricao')" id="nav-inscricao">Matrícula</a></li>
+      </ul>
     </nav>
   </header>
 
   <!-- Conteúdo Principal -->
   <main>
-    <!-- Hero Section -->
-    <section id="hero">
-      <div class="glass-card hero-card">
-        <span class="badge">SISTEMA ACADÊMICO // V2026</span>
-        <h1>DOMINE O CÓDIGO. <br><span class="neon-text">MUDE SUA REALIDADE.</span></h1>
-        <p>Aprenda programação na prática com estética retrofuturista e preparação direta para o mercado de tecnologia.</p>
-        <div class="hero-btns">
-          <a href="#cursos" class="btn-primary">EXPLORAR CURSOS</a>
-          <a href="#contato" class="btn-glow">FALAR COM MENTOR</a>
+
+    <!-- ================= TELA 1: HOME ================= -->
+    <section id="page-home" class="page-screen active">
+      <div class="hero">
+        <h1>Código Sem Filtro.<br>Carreira Sem Limites.</h1>
+        <p>Aprenda tecnologia direto ao ponto. Do código zero à construção de aplicações reais com a stack que o mercado realmente usa.</p>
+        <button class="btn-grunge" onclick="showPage('cursos')">Explorar Cursos</button>
+      </div>
+
+      <h2 style="font-family: var(--font-heading); text-align: center; margin-bottom: 2rem; color: var(--almond-cream);">
+        Trilhas Principais
+      </h2>
+
+      <div class="categories-grid">
+        <article class="glass-card category-card">
+          <span class="tag">Mais Procurado</span>
+          <h3>Python Core</h3>
+          <p>A linguagem mais versátil do mercado. Domine lógica, orientação a objetos e automação em 3 módulos evolutivos.</p>
+          <br>
+          <button class="btn-grunge" onclick="filterAndNavigate('python')">Ver Módulos</button>
+        </article>
+
+        <article class="glass-card category-card">
+          <span class="tag">Front & Back</span>
+          <h3>Desenvolvimento Web</h3>
+          <p>Crie interfaces dinâmicas com React e APIs robustas com Flask e Django. O ecossistema completo da Web.</p>
+          <br>
+          <button class="btn-grunge" onclick="filterAndNavigate('web')">Ver Módulos</button>
+        </article>
+
+        <article class="glass-card category-card">
+          <span class="tag">Essencial</span>
+          <h3>Bancos de Dados</h3>
+          <p>Estruture, consulte e gerencie dados em aplicações modernas. De SQLite a Firebase Realtime e PostgreSQL.</p>
+          <br>
+          <button class="btn-grunge" onclick="filterAndNavigate('db')">Ver Módulos</button>
+        </article>
+      </div>
+    </section>
+
+    <!-- ================= TELA 2: CURSOS ================= -->
+    <section id="page-cursos" class="page-screen">
+      <div class="courses-header">
+        <h1 style="font-family: var(--font-heading); color: var(--almond-cream);">Grade de Cursos</h1>
+        <p style="color: var(--apricot-cream);">Escolha seu ponto de partida e evolua no seu ritmo.</p>
+        
+        <div class="filter-bar">
+          <button class="filter-btn active" onclick="filterCourses('all')">Todos</button>
+          <button class="filter-btn" onclick="filterCourses('python')">Python</button>
+          <button class="filter-btn" onclick="filterCourses('web')">Web Dev</button>
+          <button class="filter-btn" onclick="filterCourses('db')">Banco de Dados</button>
+        </div>
+      </div>
+
+      <div class="courses-grid" id="courses-container">
+        <!-- Injetado Dinamicamente via JavaScript -->
+      </div>
+    </section>
+
+    <!-- ================= TELA 3: INSCRIÇÃO ================= -->
+    <section id="page-inscricao" class="page-screen">
+      <div class="contact-container">
+        <div class="glass-card">
+          <h1 style="font-family: var(--font-heading); color: var(--almond-cream); margin-bottom: 0.5rem; text-align: center;">
+            Garanta sua Vaga
+          </h1>
+          <p style="color: var(--apricot-cream); text-align: center; margin-bottom: 1.5rem;">
+            Preencha os dados abaixo e entraremos em contato com as próximas turmas.
+          </p>
+
+          <form id="enrollment-form" onsubmit="handleFormSubmit(event)">
+            <div class="form-group">
+              <label for="name">Nome Completo</label>
+              <input type="text" id="name" required placeholder="Seu nome completo">
+            </div>
+
+            <div class="form-group">
+              <label for="email">E-mail</label>
+              <input type="email" id="email" required placeholder="seu@email.com">
+            </div>
+
+            <div class="form-group">
+              <label for="course-select">Curso de Interesse</label>
+              <select id="course-select" required>
+                <option value="">Selecione um curso...</option>
+                <!-- Opções populadas via JS -->
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="notes">Mensagem / Dúvidas (Opcional)</label>
+              <textarea id="notes" rows="4" placeholder="Alguma dúvida sobre pré-requisitos ou horários?"></textarea>
+            </div>
+
+            <button type="submit" class="btn-grunge" style="width: 100%;">Enviar Matrícula</button>
+          </form>
+
+          <div id="form-feedback" class="form-feedback">
+            🚀 Inscrição enviada com sucesso! Entraremos em contato em breve.
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Seção de Cursos -->
-    <section id="cursos">
-      <div class="section-title">
-        <h2>MATRIZ DE <span class="neon-text">CONHECIMENTO</span></h2>
-        <p>Selecione sua trilha e inicie seu treinamento em tecnologia.</p>
-      </div>
-
-      <!-- Filtros Dinâmicos -->
-      <div class="filter-container glass-card">
-        <button class="filter-btn active" data-category="all">Todos os Cursos</button>
-        <button class="filter-btn" data-category="python">Python</button>
-        <button class="filter-btn" data-category="web">Dev Web</button>
-        <button class="filter-btn" data-category="db">Banco de Dados</button>
-      </div>
-
-      <!-- Grid dos Cursos -->
-      <div class="courses-grid" id="coursesGrid">
-        <!-- Preenchido via JavaScript -->
-      </div>
-    </section>
-
-    <!-- Sobre a Escola -->
-    <section id="sobre">
-      <div class="glass-card about-card">
-        <h2>SABER É <span class="gold-text">PODER</span></h2>
-        <p>Na CYBERCODE, formamos desenvolvedores prontos para os desafios reais do mercado. Com metodologia mão na massa, você constrói projetos reais e desenvolve raciocínio lógico enquanto absorve a energia dos anos 80.</p>
-        <div class="stats-grid">
-          <div class="stat-item">
-            <span class="stat-number">100%</span>
-            <span class="stat-label">Prático</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-number">+380h</span>
-            <span class="stat-label">Conteúdo</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-number">24/7</span>
-            <span class="stat-label">Suporte Tech</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Formulário de Contato/Matrícula -->
-    <section id="contato">
-      <div class="glass-card form-card">
-        <h2>INICIE SUA <span class="neon-text">JORNADA</span></h2>
-        <form id="enrollmentForm">
-          <div class="input-group">
-            <label for="name">NOME COMPLETO</label>
-            <input type="text" id="name" required placeholder="Ex: Alex Murphy">
-          </div>
-          <div class="input-group">
-            <label for="email">E-MAIL</label>
-            <input type="email" id="email" required placeholder="seu.email@cyber.com">
-          </div>
-          <div class="input-group">
-            <label for="courseSelect">CURSO DESEJADO</label>
-            <select id="courseSelect" required>
-              <!-- Preenchido via JS -->
-            </select>
-          </div>
-          <button type="submit" class="btn-primary full-width">CONFIRMAR MATRÍCULA</button>
-        </form>
-      </div>
-    </section>
   </main>
 
-  <!-- Footer -->
-  <footer class="glass-footer">
-    <p>&copy; 2026 CYBERCODE ACADEMY // TODOS OS DIREITOS RESERVADOS.</p>
+  <!-- Rodapé -->
+  <footer>
+    <p>&copy; 2026 Tech Grunge Academy. Todos os direitos reservados. Estilo, código e atitude.</p>
   </footer>
 
-  <!-- Scripts JavaScript Unificados -->
+  <!-- ==========================================================================
+     LOGICA JS (Navegação, Dados, Filtros, Form e Three.js)
+     ========================================================================== -->
   <script>
-    /* ==========================================================================
-       1. BACKGROUND 3D RETROCYBERPUNK (THREE.JS)
-       ========================================================================== */
-    const canvas = document.getElementById('three-canvas');
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
-
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-    // Criando o Grid Roxo e Dourado
-    const gridHelper = new THREE.GridHelper(200, 60, 0xecd444, 0x6e2594);
-    gridHelper.position.y = -2;
-    scene.add(gridHelper);
-
-    // Ajuste da Posição da Câmera
-    camera.position.set(0, 2, 8);
-    camera.rotation.x = -0.15;
-
-    // Loop de Animação
-    function animate() {
-      requestAnimationFrame(animate);
-
-      // Efeito de movimento contínuo do grid
-      gridHelper.position.z += 0.08;
-      if (gridHelper.position.z > 3.33) {
-        gridHelper.position.z = 0;
-      }
-
-      renderer.render(scene, camera);
-    }
-    animate();
-
-    // Responsividade da tela do Three.js
-    window.addEventListener('resize', () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    });
-
-    /* ==========================================================================
-       2. LÓGICA DA APLICAÇÃO E CURSOS
-       ========================================================================== */
-    const courses = [
-      { id: 'p1', title: 'Programação em Python 1', hours: '40h', category: 'python', desc: 'Fundamentos de programação, sintaxe moderna, lógica e primeiras estruturas de dados.' },
-      { id: 'p2', title: 'Programação em Python 2', hours: '40h', category: 'python', desc: 'Orientação a Objetos, manipulação de arquivos, APIs e tratamento de exceções.' },
-      { id: 'p3', title: 'Programação em Python 3', hours: '60h', category: 'python', desc: 'Automações avançadas, testes unitários, concorrência e estrutura de projetos.' },
+    /* --------------------------------------------------------------------------
+       1. DADOS DOS CURSOS
+       -------------------------------------------------------------------------- */
+    const coursesData = [
+      { id: 'py1', category: 'python', title: 'Programação em Python 1', hours: '40h', desc: 'Fundamentos da linguagem, sintaxe, controle de fluxo e estruturas de dados básicas.' },
+      { id: 'py2', category: 'python', title: 'Programação em Python 2', hours: '40h', desc: 'Aprofundamento em Orientação a Objetos, manipulação de arquivos e tratamento de erros.' },
+      { id: 'py3', category: 'python', title: 'Programação em Python 3', hours: '60h', desc: 'Concorrência, módulos avançados, testes automatizados e boas práticas de código.' },
       
-      { id: 'w1', title: 'Desenvolvimento Web com HTML, CSS e JS', hours: '60h', category: 'web', desc: 'Crie aplicações web responsivas e interativas utilizando os pilares da Web.' },
-      { id: 'w2', title: 'Desenvolvimento Web com React', hours: '40h', category: 'web', desc: 'Construa interfaces reativas e SPAs de alta performance no ecossistema React.' },
-      { id: 'w3', title: 'Desenvolvimento Web com Flask e Django', hours: '80h', category: 'web', desc: 'Crie aplicações web completas e APIs REST poderosas utilizando frameworks Python.' },
+      { id: 'web1', category: 'web', title: 'Desenvolvimento Web com HTML, CSS e JS', hours: '60h', desc: 'A base da web moderna. Crie sites responsivos, semânticos e dinâmicos do zero.' },
+      { id: 'web2', category: 'web', title: 'Desenvolvimento Web com React', hours: '40h', desc: 'Construa SPAs modernas utilizando componentes, hooks e gerenciamento de estado.' },
+      { id: 'web3', category: 'web', title: 'Desenvolvimento Web com Flask e Django', hours: '80h', desc: 'Desenvolvimento Backend poderoso com os dois principais frameworks Python do mercado.' },
       
-      { id: 'd1', title: 'Banco de Dados SQLite3', hours: '20h', category: 'db', desc: 'Aprenda SQL, modelagem relacional leve e integração rápida com aplicações.' },
-      { id: 'd2', title: 'Banco de Dados Realtime Database', hours: '20h', category: 'db', desc: 'Trabalhe com bancos reativos e sincronização instantânea de dados NoSQL.' },
-      { id: 'd3', title: 'Banco de Dados PostgreSQL', hours: '40h', category: 'db', desc: 'Gerenciamento de dados relacional avançado, suporte a grandes volumes e queries complexas.' }
+      { id: 'db1', category: 'db', title: 'Banco de Dados SQLite3', hours: '20h', desc: 'Conceitos relacionais, consultas SQL eficientes e integração leve para aplicações.' },
+      { id: 'db2', category: 'db', title: 'Banco de Dados Realtime Database', hours: '20h', desc: 'Bancos NoSQL em tempo real para aplicações reativas e sincronização instantânea.' },
+      { id: 'db3', category: 'db', title: 'Banco de Dados PostgreSQL', hours: '40h', desc: 'Modelagem avançada, triggers, procedures e o banco relacional mais robusto do mercado.' }
     ];
 
-    // Renderizar Cards de Cursos no Grid
-    function renderCourses(filter = 'all') {
-      const grid = document.getElementById('coursesGrid');
-      grid.innerHTML = '';
+    /* --------------------------------------------------------------------------
+       2. NAVEGAÇÃO SPA (SINGLE PAGE APPLICATION)
+       -------------------------------------------------------------------------- */
+    function showPage(pageId) {
+      document.querySelectorAll('.page-screen').forEach(screen => screen.classList.remove('active'));
+      document.querySelectorAll('nav a').forEach(link => link.classList.remove('active'));
 
-      const filteredCourses = filter === 'all' 
-        ? courses 
-        : courses.filter(c => c.category === filter);
+      document.getElementById(`page-${pageId}`).classList.add('active');
+      document.getElementById(`nav-${pageId}`).classList.add('active');
+      window.scrollTo(0, 0);
+    }
 
-      filteredCourses.forEach(course => {
-        const card = document.createElement('div');
+    function filterAndNavigate(category) {
+      showPage('cursos');
+      filterCourses(category);
+    }
+
+    /* --------------------------------------------------------------------------
+       3. RENDERIZAÇÃO E FILTRAGEM DOS CURSOS
+       -------------------------------------------------------------------------- */
+    function renderCourses(courses) {
+      const container = document.getElementById('courses-container');
+      container.innerHTML = '';
+
+      courses.forEach(course => {
+        const card = document.createElement('article');
         card.className = 'glass-card course-card';
         card.innerHTML = `
           <div>
-            <span class="badge">${course.hours}</span>
+            <span class="tag">${course.category.toUpperCase()}</span>
             <h3>${course.title}</h3>
-            <p>${course.desc}</p>
+            <div class="hours">⏱️ Carga Horária: ${course.hours}</div>
+            <p style="font-size: 0.95rem; color: var(--ghost-white); opacity: 0.9;">${course.desc}</p>
           </div>
-          <button onclick="selectCourse('${course.title}')" class="btn-primary full-width">Garantir Vaga</button>
+          <button class="btn-grunge" style="margin-top: 1.2rem;" onclick="selectCourseAndEnroll('${course.id}')">
+            Matricular-se
+          </button>
         `;
-        grid.appendChild(card);
+        container.appendChild(card);
       });
     }
 
-    // Seleção de curso direto para o formulário
-    function selectCourse(courseTitle) {
-      const select = document.getElementById('courseSelect');
-      select.value = courseTitle;
-      document.getElementById('contato').scrollIntoView({ behavior: 'smooth' });
-    }
-
-    // Inicialização da Página
-    document.addEventListener('DOMContentLoaded', () => {
-      // Carregar Cursos
-      renderCourses();
-
-      // Preencher Select de Cursos
-      const select = document.getElementById('courseSelect');
-      courses.forEach(c => {
-        const opt = document.createElement('option');
-        opt.value = c.title;
-        opt.textContent = `${c.title} [${c.hours}]`;
-        select.appendChild(opt);
-      });
-
-      // Lógica de Filtros
+    function filterCourses(category) {
+      // Atualizar botões de filtro
       document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-          e.target.classList.add('active');
-          renderCourses(e.target.dataset.category);
-        });
+        btn.classList.toggle('active', btn.textContent.toLowerCase().includes(category) || (category === 'all' && btn.textContent === 'Todos'));
       });
 
-      // Envio do Formulário (Simulação)
-      document.getElementById('enrollmentForm').addEventListener('submit', (e) => {
-        e.preventDefault();
-        const name = document.getElementById('name').value;
-        const course = document.getElementById('courseSelect').value;
-        alert(`[CYBERCODE SYSTEM]\n\nSolicitação recebida com sucesso!\nAluno: ${name}\nCurso: ${course}\n\nEntraremos em contato via e-mail em breve.`);
-        e.target.reset();
+      if (category === 'all') {
+        renderCourses(coursesData);
+      } else {
+        const filtered = coursesData.filter(c => c.category === category);
+        renderCourses(filtered);
+      }
+    }
+
+    function populateSelectOptions() {
+      const select = document.getElementById('course-select');
+      coursesData.forEach(c => {
+        const option = document.createElement('option');
+        option.value = c.id;
+        option.textContent = `${c.title} (${c.hours})`;
+        select.appendChild(option);
       });
+    }
+
+    function selectCourseAndEnroll(courseId) {
+      showPage('inscricao');
+      document.getElementById('course-select').value = courseId;
+    }
+
+    function handleFormSubmit(event) {
+      event.preventDefault();
+      const feedback = document.getElementById('form-feedback');
+      feedback.style.display = 'block';
+      document.getElementById('enrollment-form').reset();
+      
+      setTimeout(() => {
+        feedback.style.display = 'none';
+      }, 5000);
+    }
+
+    /* --------------------------------------------------------------------------
+       4. EFEITOS 3D COM THREE.JS (Fundo Dinâmico Grunge)
+       -------------------------------------------------------------------------- */
+    function initThreeJS() {
+      const canvas = document.getElementById('webgl-bg');
+      const scene = new THREE.Scene();
+      
+      const camera = new THREE.PerspectiveCamera(
+        75, window.innerWidth / window.innerHeight, 0.1, 1000
+      );
+      camera.position.z = 30;
+
+      const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+      // Criar Geometria Flutuante (Formas "Grunge" abstratas e partículas)
+      const geometry = new THREE.IcosahedronGeometry(10, 1);
+      const material = new THREE.MeshBasicMaterial({
+        color: 0x545e75,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.25
+      });
+      const sphere = new THREE.Mesh(geometry, material);
+      scene.add(sphere);
+
+      // Partículas ao redor
+      const particlesGeo = new THREE.BufferGeometry();
+      const count = 300;
+      const positions = new Float32Array(count * 3);
+
+      for(let i = 0; i < count * 3; i++) {
+        positions[i] = (Math.random() - 0.5) * 100;
+      }
+
+      particlesGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      const particlesMat = new THREE.PointsMaterial({
+        size: 0.8,
+        color: 0xc03221,
+        transparent: true,
+        opacity: 0.5
+      });
+      const particleSystem = new THREE.Points(particlesGeo, particlesMat);
+      scene.add(particleSystem);
+
+      // Interatividade com Mouse
+      let mouseX = 0;
+      let mouseY = 0;
+
+      document.addEventListener('mousemove', (e) => {
+        mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+        mouseY = -(e.clientY / window.innerHeight - 0.5) * 2;
+      });
+
+      // Animation Loop
+      function animate() {
+        requestAnimationFrame(animate);
+
+        sphere.rotation.x += 0.003;
+        sphere.rotation.y += 0.005;
+
+        particleSystem.rotation.y += 0.001;
+
+        // Movimento suave baseado no mouse
+        camera.position.x += (mouseX * 5 - camera.position.x) * 0.05;
+        camera.position.y += (mouseY * 5 - camera.position.y) * 0.05;
+        camera.lookAt(scene.position);
+
+        renderer.render(scene, camera);
+      }
+
+      animate();
+
+      // Redimensionamento de Janela
+      window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      });
+    }
+
+    /* --------------------------------------------------------------------------
+       5. INICIALIZAÇÃO DA APLICAÇÃO
+       -------------------------------------------------------------------------- */
+    window.addEventListener('DOMContentLoaded', () => {
+      renderCourses(coursesData);
+      populateSelectOptions();
+      initThreeJS();
     });
   </script>
 </body>
